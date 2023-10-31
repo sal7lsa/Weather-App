@@ -1,0 +1,22 @@
+{
+    "name": "IT Park",
+    "short_name": "Weather",
+    "description": "Weather one week",
+    "icons": [
+      {
+        "src": "../media/cloudy-sun.svg",
+        "sizes": "192x192",
+        "type": "image/svg+xml"
+      },
+      {
+        "src": "../media/cloudy-sun.svg",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "fullscreen": "true",
+    "background_color": "#ffffff00",
+    "theme_color": "#ffffff"
+  }

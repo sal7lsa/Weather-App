@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="msapplication-TileColor" content="#ffffff00">
+    <meta name="msapplication-TileImage" content="/media/cloudy-sun.svg">
+    <meta name="google" content="notranslate">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- links -->
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="media/cloudy-sun.svg" type="image/x-icon">
+    <link rel="manifest" href="json/manifest.json">
+    <link rel="apple-touch-icon" href="media/cloudy-sun.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="media/cloudy-sun.svg"> 
+    <link rel="apple-touch-icon" sizes="152x152" href="media/cloudy-sun.svg"> 
+    <link rel="apple-touch-icon" sizes="120x120" href="media/cloudy-sun.svg"> 
+    <title>Weather</title>
+</head>
+<body id="swipe" class="load">
+    <div class="search-console">
+        <label class="search-header">
+            <input type="text" placeholder="City Name" id="cityInput">
+            <button id="searchButton" onclick="searchCity()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M14.7956 14.5835L16.4926 16.2805M12.6035 12.8157C10.0651 15.3541 5.94957 15.3541 3.41116 12.8157C0.872753 10.2773 0.872753 6.16171 3.41116 3.6233C5.94957 1.0849 10.0651 1.0849 12.6035 3.6233C15.142 6.16171 15.142 10.2773 12.6035 12.8157Z" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </label>
+    </div>
+    <div class="weather left">
+        <div class="header">
+            <div class="search" onclick="searchopen()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M14.7956 14.5835L16.4926 16.2805M12.6035 12.8157C10.0651 15.3541 5.94957 15.3541 3.41116 12.8157C0.872753 10.2773 0.872753 6.16171 3.41116 3.6233C5.94957 1.0849 10.0651 1.0849 12.6035 3.6233C15.142 6.16171 15.142 10.2773 12.6035 12.8157Z" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="header-circle">
+                <span onclick="handleLeftClick()"></span>
+                <span onclick="handleRightClick()"></span>
+            </div>
+            <div></div>
+        </div>
+        <div class="hidden">
+            <div class="animation today-tomorrow"  ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)">
+                <!-- первый слайд на сегодня -->
+                <div class="card today front">
+                    <div class="location">
+                        <!-- например -->
+                        <h1><span id="country">Country</span><br><span id="city">City</span></h1>
+                        <!-- дата правильная я её уже сделал -->
+                        <h6 id="data">Tue, Jun 30</h6>
+                    </div>
+                    <div class="img-and-degree">
+                        <div class="img-one">
+                            <!-- нужно поменять название ссылки взависимости от погоды -->
+                            <!-- ночь -->
+                            <!-- <img src="media/moon.svg" alt=""> -->
+                            <!-- снег -->
+                            <!-- <img src="media/snow.svg" alt=""> -->
+                            <!-- пассмурное солнце -->
+                            <!-- <img src="media/cloudy-sun.svg" alt=""> -->
+                            <!-- пассмурная погода -->
+                            <!-- <img src="media/cloudy.svg" alt=""> -->
+                            <!-- дождь-->
+                            <!-- <img src="media/rain.svg" alt=""> -->
+                            <!-- солнечный дождь-->
+                            <!-- <img src="media/rain-sun.svg" alt=""> -->
+                            <!-- ясное солнце -->
+                            <img src="media/sun.svg" alt="" class="main-img-today" id="main-img-today">
+                        </div>
+                        <div class="degree-holder">
+                            <div class="degree">
+                                <!-- сколько градусов прямо сейчас-->
+                                <!--надо еще округлить чтобы не было некаких точек-->
+                                <h2 class="degree-in-realtime" id="degree-in-realtime">--</h2>
+                                <!-- какая погода прямо сейчас -->
+                                <!-- надо по коду погоды определить 100 200 300 и т.д. -->
+                                <h3 class="weather-in-realtime" id="weather-in-realtime">Sun</h3>
+                            </div>
+                            <span>°C</span>
+                        </div>
+                    </div>
+                    <!-- карточки про влажность и дождь на сегодня -->
+                    <div class="cards-row">
+                        <!-- вероятность дождя -->
+                        <div class="row">
+                            <div class="row-left">
+                                <div class="img-two">
+                                    <img src="media/umbrella.svg" alt="">
+                                </div>
+                                <span>RainFall</span>
+                            </div>
+                            <!-- количество осадков на сегодня -->
+                            <div class="row-right rainFall" id="rain-fall">
+                                --
+                            </div>
+                        </div>
+                        <!-- скорость ветра -->
+                        <div class="row">
+                            <div class="row-left">
+                                <div class="img-two">
+                                    <img src="media/wind.svg" alt="">
+                                </div>
+                                <span>Wind</span>
+                            </div>
+                            <!-- скорость ветра на сегодня -->
+                            <div class="row-right Wind" id="wind-speed">
+                                --
+                            </div>
+                        </div>
+                        <!-- влажность -->
+                        <div class="row">
+                            <div class="row-left">
+                                <div class="img-two">
+                                    <img class="two" src="media/Humidity.svg" alt="">
+                                </div>
+                                <span>Humidity</span>
+                            </div>
+                            <!-- вероятность дождя на сегодня -->
+                            <div class="row-right humidity" id="humidity">
+                                --
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- второй слайд на завтра -->
+                <div class="card tomorrow back" id="card-tomorrow">
+                    <div class="location">
+                        <!-- например -->
+                        <h1><span id="country-two">Country</span><br><span id="city-two">City</span></h1>
+                        <!-- дата правильная я её уже сделал -->
+                        <h6 id="data-tomorrow">Tue, Jun 30</h6>
+                    </div>
+                    <div class="img-and-degree">
+                        <div class="img-one">
+                            <!-- ясное солнце -->
+                            <img src="media/sun.svg" alt="" class="main-img-tommorow" id="main-img-tomorrow">
+                        </div>
+                        <div class="degree-holder">
+                            <div class="degree">
+                                <!-- сколько градусов завтра-->
+                                <h2 class="degree-in-tommorow">00</h2>
+                                <!-- какая погода завтра -->
+                                <h3 class="weather-in-tommorow" id="weather-in-tommorow">Rainy</h3>
+                            </div>
+                            <span>°C</span>
+                        </div>
+                    </div>
+                    <!-- карточки про влажность и дождь на завтра -->
+                    <div class="cards-row">
+                        <!-- вероятность дождя -->
+                        <div class="row">
+                            <div class="row-left">
+                                <div class="img-two">
+                                    <img src="media/umbrella.svg" alt="">
+                                </div>
+                                <span>RainFall</span>
+                            </div>
+                            <!-- количество осадков на затвра -->
+                            <div class="row-right rainFall-tommorow" id="rainFall-tommorow">
+                                --%
+                            </div>
+                        </div>
+                        <!-- скорость ветра -->
+                        <div class="row">
+                            <div class="row-left">
+                                <div class="img-two">
+                                    <img src="media/wind.svg" alt="">
+                                </div>
+                                <span>Wind</span>
+                            </div>
+                            <!-- скорость ветра на завтра -->
+                            <div class="row-right Wind-tommorow" id="Wind-tommorow">
+                                00km/h
+                            </div>
+                        </div>
+                        <!-- влажность -->
+                        <div class="row">
+                            <div class="row-left">
+                                <div class="img-two">
+                                    <img class="two" src="media/Humidity.svg" alt="">
+                                </div>
+                                <span>Humidity</span>
+                            </div>
+                            <!-- вероятность дождя на завтра -->
+                            <div class="row-right humidity-tommorow" id="humidity-tomorrow">
+                                00%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-title">
+                <div class="row-title">
+                    <div class="left">
+                        <span onclick="handleLeftClick()">Today</span>
+                        <span onclick="handleRightClick()">Tomorrow</span>
+                    </div>
+                    <div class="right" id="right" onclick="nextdaysTwo()">
+                        <span>Next 7 Days</span>
+                        <span>></span>
+                    </div>
+                </div>
+                <div class="line">
+                    <div class="circle"></div>
+                </div>
+            </div>
+            <div class="bx-hidden"> 
+                <!-- температура на сегодня каждый час -->
+                <div class="bx-scroll bx-today">
+                    <div class="bx">
+                        <div class="bx-card">
+                            <span class="bx-time">00:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">01:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">02:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">03:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">04:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">05:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">06:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">07:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">08:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">09:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">10:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">11:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">12:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">13:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">14:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">15:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">16:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">17:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">18:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">19:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">20:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">21:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">22:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">23:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- температура на завтра каждый час  -->
+                <div class="bx-scroll bx-tommorow">
+                    <div class="bx">
+                        <div class="bx-card">
+                            <span class="bx-time">00:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">01:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">02:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">03:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">04:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">05:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">06:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">07:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">08:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">09:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">10:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">11:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">12:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">13:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">14:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">15:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">16:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">17:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">18:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">19:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">20:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">21:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">22:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                        <div class="bx-card">
+                            <span class="bx-time">23:00</span>
+                            <span class="bx-img"><img src="media/sun.svg" alt=""></span>
+                            <span class="bx-degree">00°</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- следующие 7 дни -->
+        <div class="next-days notactive" id="next-days">
+            <div class="next-header">
+                <span id="nextdaysTwo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="11" viewBox="0 0 14 11" fill="none">
+                        <path d="M1.99634 5.6049L5.88543 1.71581M5.88543 10.2011L1.99634 6.31201M1.63543 6.0114L12.3873 6.0114" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span>Next 7 days</span>
+                <span></span>
+            </div>
+            <!-- температура на завтра -->
+            <div class="next-tommorow">
+                <div class="tommorow-header">
+                    <span>Tommorow</span>
+                    <span><span class="degree-in-tommorow-two">00°</span><img src="media/cloudy-sun.svg" class="two-img-tommorow" alt=""></span>
+                </div>
+                <div class="tommorow-row">
+                    <div class="item-1">
+                        <div class="item-2"><img src="media/umbrella.svg" alt=""></div>
+                        <div class="item-3 rainFall-tommorow-two">0%</div>
+                    </div>
+                    <div class="item-1">
+                        <div class="item-2"><img src="media/wind.svg" alt=""></div>
+                        <div class="item-3 Wind-tommorow-two">0km/h</div>
+                    </div>
+                    <div class="item-1">
+                        <div class="item-2"><img src="media/Humidity.svg" alt=""></div>
+                        <div class="item-3 humidity-tommorow-two">0%</div>
+                    </div>
+                </div>
+            </div>
+            <!-- температура на 6 дней после завтра -->
+            <div class="six-days">
+                <div class="any-day day-one">
+                    <!-- надо изменить еще класс "day" на день после завтра-->
+                    <div class="day">Monday</div>
+                    <div class="day-degree-img">
+                        <span class="day-degree">0 °</span>
+                        <!-- надо изменить фото по коду погоды -->
+                        <img src="media/sun.svg" class="day-img" alt="">
+                    </div>
+                </div>
+                <div class="any-day day-two">
+                    <div class="day">Tuesday</div>
+                    <div class="day-degree-img">
+                        <span class="day-degree">0 °</span>
+                        <img src="media/sun.svg" class="day-img" alt="">
+                    </div>
+                </div>
+                <div class="any-day day-three">
+                    <div class="day">Wednesday</div>
+                    <div class="day-degree-img">
+                        <span class="day-degree">0 °</span>
+                        <img src="media/sun.svg" class="day-img" alt="">
+                    </div>
+                </div>
+                <div class="any-day day-four">
+                    <div class="day">Thursday</div>
+                    <div class="day-degree-img">
+                        <span class="day-degree">0 °</span>
+                        <img src="media/sun.svg" class="day-img" alt="">
+                    </div>
+                </div>
+                <div class="any-day day-five">
+                    <div class="day">Friday</div>
+                    <div class="day-degree-img">
+                        <span class="day-degree">0 °</span>
+                        <img src="media/sun.svg" class="day-img" alt="">
+                    </div>
+                </div>
+                <div class="any-day day-six">
+                    <div class="day">Saturday</div>
+                    <div class="day-degree-img">
+                        <span class="day-degree">0 °</span>
+                        <img src="media/sun.svg" class="day-img" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="load-elements">
+        <div class="container">
+            <div class="cloud front">
+              <span class="left-front"></span>
+              <span class="right-front"></span>
+            </div>
+            <span class="sun sunshine"></span>
+            <span class="sun"></span>
+            <div class="cloud back">
+              <span class="left-back"></span>
+              <span class="right-back"></span>
+            </div>
+          </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/JQmain.js"></script>
+</body>
+</html>
