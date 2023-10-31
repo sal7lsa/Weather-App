@@ -12,15 +12,17 @@ async function fetchWeatherData(lat, long) {
       let url = `https://api.weatherapi.com/v1/timezone.json?key=769397135c3c4799afd232913232108&q=${locationName}`;
       let response = await fetch(url);
       let weatherData = await response.json();
-      console.log(weatherData)
       // Обработка полученных данных, например, установка значений в элементы DOM
       document.getElementById('country').textContent = weatherData.location.country;
       document.getElementById('city').textContent = weatherData.location.name;
       document.getElementById('country-two').textContent = weatherData.location.country;
       document.getElementById('city-two').textContent = weatherData.location.name;
 
-
-          console.log(data);
+          // api
+      let apiurlTwo = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=8`;
+      const dataTwo = await sendRequest('GET', apiurlTwo);
+      console.log(dataTwo)
+          // console.log(data);
           // weather code
           // today
           let sunriseStr = data.daily.sunrise[0];
@@ -81,39 +83,44 @@ async function fetchWeatherData(lat, long) {
           // tomorrow
           let weatherTextTomorrow = document.getElementById('weather-in-tommorow');
           let mainimgTomorrow = document.getElementById('main-img-tomorrow');
-          let weathercodeTomorrowAll = data.hourly.weathercode;
-          let weathercodeTomorrowOne = 0;
-          for(q = 24; q < weathercodeTomorrowAll.length; q++){
-            weathercodeTomorrowOne = weathercodeTomorrowOne + weathercodeTomorrowAll[q];
-          }
-          let weathercodeTomorrow = Math.round(weathercodeTomorrowOne / 24);
+          let mainimgTomorrowTwo = document.getElementById('main-img-tomorrow-two');
+          let weathercodeTomorrow = dataTwo.daily.weathercode[1];
           if(weathercodeTomorrow === 0){// если солнечно
             weatherTextTomorrow.textContent = 'Sun';
             mainimgTomorrow.src = 'media/sun.svg';
+            mainimgTomorrowTwo.src = 'media/sun.svg';
           } else if (weathercodeTomorrow >= 1 && weathercodeTomorrow <= 30){// если немного пасмурно
             weatherTextTomorrow.textContent = 'Cloudy Sun';
             mainimgTomorrow.src = 'media/cloudy-sun.svg';
+            mainimgTomorrowTwo.src = 'media/cloudy-sun.svg';
           } else if (weathercodeTomorrow >= 31 && weathercodeTomorrow <= 50){// если пасмурно и туман
             weatherTextTomorrow.textContent = 'Cloudy';
             mainimgTomorrow.src = 'media/cloudy.svg';
+            mainimgTomorrowTwo.src = 'media/cloudy.svg';
           } else if (weathercodeTomorrow >= 51 && weathercodeTomorrow <= 57){// если морось, небольшой дождик
             weatherTextTomorrow.textContent = 'Light Rain';
             mainimgTomorrow.src = 'media/rain-sun.svg';
+            mainimgTomorrowTwo.src = 'media/rain-sun.svg';
           } else if (weathercodeTomorrow >= 58 && weathercodeTomorrow <= 67){// если дождь
             weatherTextTomorrow.textContent = 'Rainy';
             mainimgTomorrow.src = 'media/rain.svg';
+            mainimgTomorrowTwo.src = 'media/rain.svg';
           } else if (weathercodeTomorrow >= 68 && weathercodeTomorrow <= 77){// если легкий снег
             weatherTextTomorrow.textContent = 'Light Snow';
             mainimgTomorrow.src = 'media/light-snow-sun.svg';
+            mainimgTomorrowTwo.src = 'media/light-snow-sun.svg';
           } else if (weathercodeTomorrow >= 78 && weathercodeTomorrow <= 86){// если снег
             weatherTextTomorrow.textContent = 'Snow';
             mainimgTomorrow.src = 'media/snow.svg';
+            mainimgTomorrowTwo.src = 'media/snow.svg';
           } else if (weathercodeTomorrow >= 87 && weathercodeTomorrow <= 99){ // если гроза
             weatherTextTomorrow.textContent = 'Storm';
             mainimgTomorrow.src = 'media/storm.svg';
+            mainimgTomorrowTwo.src = 'media/storm.svg';
           } else {
             weatherTextTomorrow.textContent = 'Storm';
             mainimgTomorrow.src = 'media/storm.svg';
+            mainimgTomorrowTwo.src = 'media/storm.svg';
           } 
           // other
           document.getElementById('degree-in-realtime').textContent = Math.round(data.current_weather.temperature);
@@ -123,6 +130,7 @@ async function fetchWeatherData(lat, long) {
             degreeTomorrowOne = degreeTomorrowOne + degreeTomorrowAll[o];
           }
           document.querySelector('.degree-in-tommorow').textContent = Math.round(degreeTomorrowOne / 24);
+          document.querySelector('.degree-in-tommorow-two').textContent = Math.round(degreeTomorrowOne / 24) + ' °';
           // влажность в среднем на сегодня
           let soil = data.hourly.relativehumidity_2m;
           let soilOne = 0;
@@ -153,21 +161,28 @@ async function fetchWeatherData(lat, long) {
           }
           let humidTomorrow = document.getElementById('humidity-tomorrow');
           humidTomorrow.textContent = Math.round(soilTwo / 24) + '%';
+          let humidTomorrowTwo = document.getElementById('humidity-tomorrow-two');
+          humidTomorrowTwo.textContent = Math.round(soilTwo / 24) + '%';
+
           // функция для определение вероятности дождя в среднем на завтра
           let rainFallTomorrow = document.getElementById('rainFall-tommorow');
+          let rainFallTomorrowTwo = document.getElementById('rainFall-tommorow-two');
           let dailyTomorrow = 0;
           for(let b = 24; b < dailyOne.length; b++){
             dailyTomorrow = dailyTomorrow + dailyOne[b];
           }
           rainFallTomorrow.textContent = Math.round(dailyTomorrow / 24) + '%';
-          // функция для определения средней вероятности дождя на завтра
+          rainFallTomorrowTwo.textContent = Math.round(dailyTomorrow / 24) + '%';
+          // функция для определения средней скорости ветра на завтра
           let windOne = data.hourly.windspeed_10m;
           let windspeedTomorrow = document.getElementById('Wind-tommorow');
+          let windspeedTomorrowTwo = document.getElementById('Wind-tommorow-two');
           let windTomorrow = 0;
           for(let r = 24; r < windOne.length; r++){
             windTomorrow = windTomorrow + windOne[r]
           }
           windspeedTomorrow.textContent = Math.round(windTomorrow / 24) + 'km/h';
+          windspeedTomorrowTwo.textContent = Math.round(windTomorrow / 24) + 'km/h';
           // на каждый час
           for(let c = 0;c <= 24;c++){
             let everyTimeDegreeToday = document.getElementsByClassName('bx-degree')[c];
@@ -232,13 +247,13 @@ async function fetchWeatherData(lat, long) {
               } else {
                 mainimgToday.src = 'media/moon.svg';
              }
-            } else if (data.hourly.weathercode[c] >= 1 && data.hourly.weathercode[c] <= 3){// если немного пасмурно
+            } else if (data.hourly.weathercode[c] >= 1 && data.hourly.weathercode[c] <= 30){// если немного пасмурно
               if (currentTime >= sunriseStr && currentTime < sunsetStr) {
                 mainimgToday.src = 'media/cloudy-sun.svg';
               } else { 
                 mainimgToday.src = 'media/cloudy-moon.svg';     
               }
-            } else if (data.hourly.weathercode[c] === 45 && data.hourly.weathercode[c] === 48){// если пасмурно и туман
+            } else if (data.hourly.weathercode[c] >= 31 && data.hourly.weathercode[c] <= 50){// если пасмурно и туман
               mainimgToday.src = 'media/cloudy.svg';
             } else if (data.hourly.weathercode[c] >= 51 && data.hourly.weathercode[c] <= 57){// если морось, небольшой дождик
               if (currentTime >= sunriseStr && currentTime < sunsetStr) {
@@ -247,23 +262,55 @@ async function fetchWeatherData(lat, long) {
               } else {// заменить 
                 mainimgToday.src = 'media/rain-moon.svg';  // заменить
               }
-            } else if (data.hourly.weathercode[c] >= 61 && data.hourly.weathercode[c] <= 67){// если дождь
+            } else if (data.hourly.weathercode[c] >= 58 && data.hourly.weathercode[c] <= 67){// если дождь
               
               mainimgToday.src = 'media/rain.svg';
-            } else if (data.hourly.weathercode[c] >= 71 && data.hourly.weathercode[c] <= 77){// если легкий снег
+            } else if (data.hourly.weathercode[c] >= 68 && data.hourly.weathercode[c] <= 77){// если легкий снег
               if (currentTime >= sunriseStr && currentTime < sunsetStr) {// заменить
                 mainimgToday.src = 'media/light-snow-sun.svg';
               } else {// заменить 
                 mainimgToday.src = 'media/light-snow-moon.svg';  // заменить 
               }
-            } else if (data.hourly.weathercode[c] >= 80 && data.hourly.weathercode[c] <= 86){// если снег
+            } else if (data.hourly.weathercode[c] >= 78 && data.hourly.weathercode[c] <= 86){// если снег
               mainimgToday.src = 'media/snow.svg';
-            } else if (data.hourly.weathercode[c] >= 95 && data.hourly.weathercode[c] <= 99){ // если гроза
+            } else if (data.hourly.weathercode[c] >= 87 && data.hourly.weathercode[c] <= 99){ // если гроза
               mainimgToday.src = 'media/storm.svg';
             } else {
               mainimgToday.src = 'media/storm.svg';
             } 
           }
+      // для 6дней 
+          // start
+      let sixdays = document.querySelectorAll('.any-day');
+      for (let f = 0; f < sixdays.length; f++) {
+          let anyDay = sixdays[f];
+          let anyImg = anyDay.querySelector('.day-img');
+          let weathercodeSixdays = dataTwo.daily.weathercode[f + 2];
+          let anyDayDegree = anyDay.querySelector('.day-degree');
+          anyDayDegree.innerHTML = `
+            <span style="font-size: 12px;color: #9C9EAA;">${Math.round(dataTwo.daily.temperature_2m_min[f + 2])}°</span> ${Math.round(dataTwo.daily.temperature_2m_max[f + 2]) + ' °'}
+          `
+          if(weathercodeSixdays === 0){// если солнечно
+            anyImg.src = 'media/sun.svg';
+          } else if (weathercodeSixdays >= 1 && weathercodeSixdays <= 30){// если немного пасмурно
+            anyImg.src = 'media/cloudy-sun.svg';
+          } else if (weathercodeSixdays >= 31 && weathercodeSixdays <= 50){// если пасмурно и туман
+            anyImg.src = 'media/cloudy.svg';
+          } else if (weathercodeSixdays >= 51 && weathercodeSixdays <= 57){// если морось, небольшой дождик
+            anyImg.src = 'media/rain-sun.svg';
+          } else if (weathercodeSixdays >= 58 && weathercodeSixdays <= 67){// если дождь
+            anyImg.src = 'media/rain.svg';
+          } else if (weathercodeSixdays >= 68 && weathercodeSixdays <= 77){// если легкий снег
+            anyImg.src = 'media/light-snow-sun.svg';
+          } else if (weathercodeSixdays >= 78 && weathercodeSixdays <= 86){// если снег
+            anyImg.src = 'media/snow.svg';
+          } else if (weathercodeSixdays >= 87 && weathercodeSixdays <= 99){ // если гроза
+            anyImg.src = 'media/storm.svg';
+          } else {
+            anyImg.src = 'media/storm.svg';
+          } 
+      }
+
         
     } catch (error) {
       alert('Invalid location entered or weather data retrieval failed.'); 
@@ -291,6 +338,21 @@ function sendRequest(method, url, body = null) {
   });
 }
 
+
+
+let currentDate = new Date();
+
+// Массив с названиями дней недели на английском
+let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+for (let i = 1; i < 7; i++) {
+    let futureDate = new Date(currentDate.getTime() + i * 24 * 60 * 60 * 1000);
+    let dayIndex = futureDate.getDay();
+    let dayName = daysOfWeek[dayIndex];
+    let allDay = document.querySelectorAll('.any-day .day');
+    allDay[i-1].textContent = dayName;
+
+}
 
 
 

@@ -78,7 +78,7 @@ body{
         height: 100vh;
         overflow-x: hidden;
         box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
-        padding: 22px 0;
+        padding: 22px 0 0;
         backdrop-filter: blur(50px);
         .header{
             display: flex;
@@ -106,6 +106,7 @@ body{
         }
         .hidden{
             width: 100%;
+            // height: 100%;
             overflow: hidden;
             .animation{
                 width: 200%;
@@ -239,13 +240,13 @@ body{
             .bx-hidden{
                 width: 200%;
                 display: flex;
-                padding: 10px 0;
+                padding: 10px 0 0;
                 transition: all 0.2s ease-in-out;
                 .bx-scroll{
                     width: 100%;
                     overflow: scroll;
                     .bx{
-                        // white-space: nowrap;
+                        padding-bottom: 20px;
                         width: 2300px;
                         display: flex;
                         justify-content: space-between;
@@ -296,7 +297,7 @@ body{
             padding: 0;
             margin: 0;
             width: 100%;
-            padding: 22px;
+            padding: 22px 22px 44px;
             height: fit-content;
             right: 0px;
             top: 0px;
