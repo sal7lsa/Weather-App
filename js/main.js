@@ -22,7 +22,7 @@ async function fetchWeatherData(lat, long) {
       let apiurlTwo = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=8`;
       const dataTwo = await sendRequest('GET', apiurlTwo);
       console.log(dataTwo)
-          // console.log(data);
+          console.log(data);
           // weather code
           // today
           let sunriseStr = data.daily.sunrise[0];
@@ -48,7 +48,7 @@ async function fetchWeatherData(lat, long) {
               weatherText.textContent = 'Cloudy Night';
               mainimgToday.src = 'media/cloudy-moon.svg';     
             }
-          } else if (data.current_weather.weathercode === 45 && data.current_weather.weathercode === 48){// если пасмурно и туман
+          } else if (data.current_weather.weathercode >= 31 && data.current_weather.weathercode <= 50){// если пасмурно и туман
             weatherText.textContent = 'Cloudy';
             mainimgToday.src = 'media/cloudy.svg';
           } else if (data.current_weather.weathercode >= 51 && data.current_weather.weathercode <= 57){// если морось, небольшой дождик
@@ -59,10 +59,10 @@ async function fetchWeatherData(lat, long) {
             } else {// заменить 
               mainimgToday.src = 'media/rain-moon.svg';  // заменить
             }
-          } else if (data.current_weather.weathercode >= 61 && data.current_weather.weathercode <= 67){// если дождь
+          } else if (data.current_weather.weathercode >= 58 && data.current_weather.weathercode <= 67){// если дождь
             weatherText.textContent = 'Rainy';
             mainimgToday.src = 'media/rain.svg';
-          } else if (data.current_weather.weathercode >= 71 && data.current_weather.weathercode <= 77){// если легкий снег
+          } else if (data.current_weather.weathercode >= 68 && data.current_weather.weathercode <= 77){// если легкий снег
             if (currentTime >= sunriseStr && currentTime < sunsetStr) {// заменить
               weatherText.textContent = 'Light Snow';
               mainimgToday.src = 'media/light-snow-sun.svg';
@@ -70,10 +70,10 @@ async function fetchWeatherData(lat, long) {
               weatherText.textContent = 'light Snow';
               mainimgToday.src = 'media/light-snow-moon.svg';  // заменить 
             }
-          } else if (data.current_weather.weathercode >= 80 && data.current_weather.weathercode <= 86){// если снег
+          } else if (data.current_weather.weathercode >= 78 && data.current_weather.weathercode <= 86){// если снег
             weatherText.textContent = 'Snow';
             mainimgToday.src = 'media/snow.svg';
-          } else if (data.current_weather.weathercode >= 95 && data.current_weather.weathercode <= 99){ // если гроза
+          } else if (data.current_weather.weathercode >= 87 && data.current_weather.weathercode <= 99){ // если гроза
             weatherText.textContent = 'Storm';
             mainimgToday.src = 'media/storm.svg';
           } else {
@@ -200,13 +200,13 @@ async function fetchWeatherData(lat, long) {
               } else {
                 mainimgToday.src = 'media/moon.svg';
              }
-            } else if (data.hourly.weathercode[c] >= 1 && data.hourly.weathercode[c] <= 3){// если немного пасмурно
+            } else if (data.hourly.weathercode[c] >= 1 && data.hourly.weathercode[c] <= 30){// если немного пасмурно
               if (currentTime >= sunriseStr && currentTime < sunsetStr) {
                 mainimgToday.src = 'media/cloudy-sun.svg';
               } else { 
                 mainimgToday.src = 'media/cloudy-moon.svg';     
               }
-            } else if (data.hourly.weathercode[c] === 45 && data.hourly.weathercode[c] === 48){// если пасмурно и туман
+            } else if (data.hourly.weathercode[c] >= 30 && data.hourly.weathercode[c] <= 50){// если пасмурно и туман
               mainimgToday.src = 'media/cloudy.svg';
             } else if (data.hourly.weathercode[c] >= 51 && data.hourly.weathercode[c] <= 57){// если морось, небольшой дождик
               if (currentTime >= sunriseStr && currentTime < sunsetStr) {
@@ -215,18 +215,18 @@ async function fetchWeatherData(lat, long) {
               } else {// заменить 
                 mainimgToday.src = 'media/rain-moon.svg';  // заменить
               }
-            } else if (data.hourly.weathercode[c] >= 61 && data.hourly.weathercode[c] <= 67){// если дождь
+            } else if (data.hourly.weathercode[c] >= 58 && data.hourly.weathercode[c] <= 67){// если дождь
               
               mainimgToday.src = 'media/rain.svg';
-            } else if (data.hourly.weathercode[c] >= 71 && data.hourly.weathercode[c] <= 77){// если легкий снег
+            } else if (data.hourly.weathercode[c] >= 68 && data.hourly.weathercode[c] <= 77){// если легкий снег
               if (currentTime >= sunriseStr && currentTime < sunsetStr) {// заменить
                 mainimgToday.src = 'media/light-snow-sun.svg';
               } else {// заменить 
                 mainimgToday.src = 'media/light-snow-moon.svg';  // заменить 
               }
-            } else if (data.hourly.weathercode[c] >= 80 && data.hourly.weathercode[c] <= 86){// если снег
+            } else if (data.hourly.weathercode[c] >= 78 && data.hourly.weathercode[c] <= 86){// если снег
               mainimgToday.src = 'media/snow.svg';
-            } else if (data.hourly.weathercode[c] >= 95 && data.hourly.weathercode[c] <= 99){ // если гроза
+            } else if (data.hourly.weathercode[c] >= 87 && data.hourly.weathercode[c] <= 99){ // если гроза
               mainimgToday.src = 'media/storm.svg';
             } else {
               mainimgToday.src = 'media/storm.svg';
@@ -288,7 +288,7 @@ async function fetchWeatherData(lat, long) {
           let weathercodeSixdays = dataTwo.daily.weathercode[f + 2];
           let anyDayDegree = anyDay.querySelector('.day-degree');
           anyDayDegree.innerHTML = `
-            <span style="font-size: 12px;color: #9C9EAA;">${Math.round(dataTwo.daily.temperature_2m_min[f + 2])}°</span> ${Math.round(dataTwo.daily.temperature_2m_max[f + 2]) + ' °'}
+            <span style="font-size: 12px;color: #9C9EAA;">${Math.round(dataTwo.daily.temperature_2m_min[f + 2])}/</span> ${Math.round(dataTwo.daily.temperature_2m_max[f + 2]) + ' °'}
           `
           if(weathercodeSixdays === 0){// если солнечно
             anyImg.src = 'media/sun.svg';
