@@ -552,5 +552,12 @@ function nextdaysTwo(){
   let next = document.querySelector('#next-days');
   next.classList.remove('notactive');
   next.classList.add('active');
+  let nextTwo = document.querySelector('#nextTwo-days');
+  nextTwo.classList.add('notactive');
+  nextTwo.classList.remove('active');
+  let nextThree = document.querySelector('#nextThree-days');
+  nextThree.classList.add('notactive');
+  nextThree.classList.remove('active');
+
 }
 
