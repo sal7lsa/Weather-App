@@ -127,32 +127,32 @@
       }
       
 }
-&.load{
-    .load-elements{
-        opacity: 1;
+body{
+    &.load{
+        .load-elements{
+            opacity: 1;
+        }
     }
-}
-&.notload{
-    .load-elements{
-        animation-name: bodyLoader;
-        animation-duration: 0.3s;
-        animation-fill-mode: forwards;
-        @keyframes bodyLoader {
-            0%{
-                opacity: 1;
-            }
-            70%{
-                opacity: 0;
-                display: block;
-            }
-            100%{
-                display: none;
-                opacity: 0;
+    &.notload{
+        .load-elements{
+            animation-name: bodyLoader;
+            animation-duration: 0.3s;
+            animation-fill-mode: forwards;
+            @keyframes bodyLoader {
+                0%{
+                    opacity: 1;
+                }
+                70%{
+                    opacity: 0;
+                    display: block;
+                }
+                100%{
+                    display: none;
+                    opacity: 0;
+                }
             }
         }
     }
-}
-body{
     background: rgb(254,227,188);
     background: linear-gradient(135deg, rgba(254,227,188,1) 0%, rgba(251,167,78,1) 70%, rgba(244,157,120,1) 100%);
     background-size: cover;
