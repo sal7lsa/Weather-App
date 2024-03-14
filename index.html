@@ -23,6 +23,20 @@
     <title>Weather</title>
 </head>
 <body id="swipe" class="load">
+    <div class="load-elements">
+        <div class="container">
+            <div class="cloud front">
+              <span class="left-front"></span>
+              <span class="right-front"></span>
+            </div>
+            <span class="sun sunshine"></span>
+            <span class="sun"></span>
+            <div class="cloud back">
+              <span class="left-back"></span>
+              <span class="right-back"></span>
+            </div>
+          </div>
+    </div>
     <div class="search-console">
         <label class="search-header">
             <input type="text" placeholder="City Name" id="cityInput">
@@ -46,7 +60,7 @@
             </div>
             <div></div>
         </div>
-        <div class="hiddenn" id="nextThree-days">
+        <div class="weather-inside" id="nextThree-days">
             <div class="animation today-tomorrow"  ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)">
                 <!-- первый слайд на сегодня -->
                 <div class="card today front">
@@ -545,20 +559,7 @@
             </div>
         </div>
     </div>
-    <div class="load-elements">
-        <div class="container">
-            <div class="cloud front">
-              <span class="left-front"></span>
-              <span class="right-front"></span>
-            </div>
-            <span class="sun sunshine"></span>
-            <span class="sun"></span>
-            <div class="cloud back">
-              <span class="left-back"></span>
-              <span class="right-back"></span>
-            </div>
-          </div>
-    </div>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/JQmain.js"></script>
